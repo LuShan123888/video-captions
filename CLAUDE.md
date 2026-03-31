@@ -38,7 +38,15 @@ src/
     └── logging.py     # 日志系统
 ```
 
-**扩展新平台：** 在 `service/` 下创建新类继承 `SubtitleService`，实现 `is_supported()`, `get_info()`, `list_subtitles()`, `download_subtitle()` 等方法。
+**扩展新平台：** 在 `service/` 下创建新类继承 `SubtitleService`，实现 `is_supported()`, `get_info()`, `list_subtitles()`, `download_subtitle()` 等方法。然后在 `service/__init__.py` 的 `_SERVICE_REGISTRY` 和 `get_service()` 中注册，匹配优先级为 local > bilibili > youtube。
+
+**服务工厂：** `service/__init__.py` 提供 `get_service(source, browser)` 根据来源自动识别并返回对应服务实例。`LocalService` 不需要 browser 参数，`BilibiliService`/`YouTubeService` 需要。
+
+## MCP 工具
+
+MCP 服务器（`handler/mcp.py`）暴露两个 tool：
+- `download_captions` — 在线视频字幕下载（B站/YouTube），参数：url, format, model_size, browser
+- `transcribe_local_file` — 本地文件 ASR 转录，参数：file_path, format, model_size
 
 ## 开发命令
 
